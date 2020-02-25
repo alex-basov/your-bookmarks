@@ -6,16 +6,20 @@ body {
   min-height: 100vh;
 }
 
-.floater {
-  background: #fff;
+.content {
   font-size: 18px;
   line-height: 1.5;
   max-width: 500px;
   margin: 0 auto;
-  border-radius: 5px;
   position: relative;
-  transition: 0.3s cubic-bezier(0.75, 0.885, 0.32, 1.4) all;
+}
 
+.floater {
+  background: #fff;
+  transition: 0.3s cubic-bezier(0.75, 0.885, 0.32, 1.4) all;
+  margin-bottom: 30px;
+  border-radius: 5px;
+  z-index: 15;
 }
 
 .floater input[type=text] {
@@ -46,6 +50,8 @@ body {
   height: 100%;
   opacity: 0;
   transition: 0.3s ease opacity;
+  z-index: 10;
+  pointer-events: none;
 }
 
 body.show-floater .floater {
@@ -59,4 +65,37 @@ body.show-floater .floater input[type=text] {
 
 body.show-floater .overlay {
   opacity: 1;
+  pointer-events: all;
+}
+
+/* ====================== */
+.bookmarks-list {
+  position: relative;
+  z-index: 9;
+}
+
+.bookmark {
+  display:block;
+  background: #fff;
+  color: #999;
+  padding: 20px;
+  transition: 0.3s ease all;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.bookmark:hover {
+  color: #1ce;
+  text-decoration: none;
+}
+
+.bookmark:first-child {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.bookmark:last-child {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom: 0;
 }
