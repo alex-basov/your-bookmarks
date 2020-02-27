@@ -106,7 +106,7 @@ body.show-floater .overlay {
 }
 
 .bookmark .img {
-  bg-color: #ddd;
+  background-color: #ddd;
   border-radius: 3px;
   background-image: url('https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=webp&v=1530129081');
   background-size: cover;

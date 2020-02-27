@@ -50,28 +50,17 @@ function createBookrmark(e) {
 }
 
 function fillBookmarksList(bookmarks = []) {
-  const bookmarksHtml = bookmarks.map((bookmark, i) => {
+  bookmarksList.innerHTML = bookmarks.map((bookmark, i) => {
     return `
       <a href="#" class="bookmark" data-id="${i}">
         <div class="img"></div>
         <div class="title">${bookmark.title}</div>
-        <svg class="octicon octicon-x" viewBox="0 0 12 16" version="1.1" width="48" aria-hidden="true">
+        <svg class="octicon octicon-x" aria-hidden="true">
           <path fill-rule="evenodd" fill="currentColor" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"></path>
         </svg>
       </a>
     `
   }).join('');
-
-  bookmarksList.innerHTML = bookmarksHtml;
-  // let bookmarksHtml =  '';
-  // for (let i = 0; i < bookmarks.length; i++) {
-  //   bookmarksHtml += `
-  //     <a href="#" class="bookmark">
-  //       ${bookmarks[i].title}
-  //     </a>
-  //   `;
-  // }
-  // console.log(bookmarksHtml);
 }
 
 function removeBookmark(e) {
