@@ -1,5 +1,5 @@
-const body    = document.body;
-const input   = document.querySelector('input[type=text]');
+const body = document.body;
+const input = document.querySelector('input[type=text]');
 const overlay = document.querySelector('.overlay');
 
 input.addEventListener('focusin', showFloater);
@@ -19,18 +19,18 @@ function closeFloater() {
 // =======================
 localStorage.setItem('my_thing', 'something');
 
-const bookmarksList  = document.querySelector('.bookmarks-list');
-const bookmarkForm  = document.querySelector('.bookmark-form');
+const bookmarksList = document.querySelector('.bookmarks-list');
+const bookmarkForm = document.querySelector('.bookmark-form');
 const bookmarkInput = document.querySelector('input[type=text]');
-const bookmarks     = JSON.parse(localStorage.getItem('bookmarks')) || [];
+const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 
 fillBookmarksList(bookmarks);
 
-function createBookrmark (e) {
+function createBookrmark(e) {
   e.preventDefault();
 
   // add a new bookmark to the bookmarks
-  const title          = bookmarkInput.value;
+  const title = bookmarkInput.value;
   const bookmark = {
     title: title
   };
@@ -50,10 +50,14 @@ function createBookrmark (e) {
 }
 
 function fillBookmarksList(bookmarks = []) {
-  const bookmarksHtml = bookmarks.map((bookmark) => {
+  const bookmarksHtml = bookmarks.map((bookmark, i) => {
     return `
-      <a href="#" class="bookmark">
-        ${bookmark.title}
+      <a href="#" class="bookmark" data-id="${i}">
+        <div class="img"></div>
+        <div class="title">${bookmark.title}</div>
+        <svg class="octicon octicon-x" viewBox="0 0 12 16" version="1.1" width="48" aria-hidden="true">
+          <path fill-rule="evenodd" fill="currentColor" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"></path>
+        </svg>
       </a>
     `
   }).join('');
@@ -70,9 +74,23 @@ function fillBookmarksList(bookmarks = []) {
   // console.log(bookmarksHtml);
 }
 
+function removeBookmark(e) {
+  if (!e.target.matches('.octicon-x')) return;
+
+  // find the index
+  // remove from te bookmarks using splice
+  // fill the list
+  // store back to localStorage
+  const index = e.target.parentNode.dataset.id;
+  bookmarks.splice(index,1);
+  fillBookmarksList(bookmarks);
+  storeBookmarks(bookmarks);
+}
+
 function storeBookmarks(bookmarks = []) {
   // save the bookmarks to localStorage
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
 }
 
 bookmarkForm.addEventListener('submit', createBookrmark);
+bookmarksList.addEventListener('click', removeBookmark);
