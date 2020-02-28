@@ -23,37 +23,47 @@ const bookmarksList = document.querySelector('.bookmarks-list');
 const bookmarkForm = document.querySelector('.bookmark-form');
 const bookmarkInput = document.querySelector('input[type=text]');
 const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+const apiUrl = 'https://opengraph.io/api/1.1/site/';
+const appId = '7ae3c4c0-6b2a-4505-bc14-cd94b639f884';
+
+const myUrl = encodeURIComponent('https://scotch.io/tutorials/how-to-use-the-javascript-fetch-api-to-get-data');
 
 fillBookmarksList(bookmarks);
 
 function createBookrmark(e) {
   e.preventDefault();
 
-  // add a new bookmark to the bookmarks
-  const title = bookmarkInput.value;
-  const bookmark = {
-    title: title
-  };
-  bookmarks.push(bookmark);
-  fillBookmarksList(bookmarks);
-  storeBookmarks(bookmarks);
-  bookmarkForm.reset();
+  if (!bookmarkInput.value) {
+    alert('enter you link, please');
+    return;
+  }
 
-  console.table(bookmarks);
-  // const bookmark       = document.createElement('a');
-  // bookmark.className   = 'bookmark';
-  // bookmark.textContent = title;
-  // bookmark.href        = '#';
-  // bookmark.target      = '_blank';
-  // console.log(bookmark);
-  // bookmarksList.appendChild(bookmark);
+  const url = encodeURIComponent(bookmarkInput.value);
+
+  fetch(apiUrl + url + '?app_id=' + appId)
+    .then(response => response.json())
+    .then(data => {
+      const bookmark = {
+        title: data.hybridGraph.title,
+        image: data.hybridGraph.image,
+        link: data.hybridGraph.url
+      };
+
+      bookmarks.push(bookmark);
+      fillBookmarksList(bookmarks);
+      storeBookmarks(bookmarks);
+      bookmarkForm.reset();
+    })
+    .catch(error => {
+      alert('There was a problem getting info');
+    })
 }
 
 function fillBookmarksList(bookmarks = []) {
   bookmarksList.innerHTML = bookmarks.map((bookmark, i) => {
     return `
-      <a href="#" class="bookmark" data-id="${i}">
-        <div class="img"></div>
+      <a href="${bookmark.link}" class="bookmark" data-id="${i}"  target=”_blank”>
+        <div class="img" style="background-image: url('${bookmark.image}')"></div>
         <div class="title">${bookmark.title}</div>
         <svg class="octicon octicon-x" aria-hidden="true">
           <path fill-rule="evenodd" fill="currentColor" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"></path>
@@ -71,7 +81,7 @@ function removeBookmark(e) {
   // fill the list
   // store back to localStorage
   const index = e.target.parentNode.dataset.id;
-  bookmarks.splice(index,1);
+  bookmarks.splice(index, 1);
   fillBookmarksList(bookmarks);
   storeBookmarks(bookmarks);
 }
